@@ -24,15 +24,18 @@
     <br>
 
 
-   
-   <form class="form" method="POST" action="">
-       {{ form.hidden_tag() }}
-       {{ form.username }}
-       {{ form.password }}    
-       {{ form.submit }} 
-   </form>
+    <div class="box has-text-centered">
+      <form class="form" method="POST" action="">
+          {{ form.hidden_tag() }}
+          {{ form.username }}
+          {{ form.password }}    
+          {{ form.submit }} 
+      </form>
+    </div>
    <br>
    <br>
-   <a class="button is-primary" href="{{ url_for('register')}}">Don't have an account Sing Up</a>
+   <div class="box has-text-centered">
+      <a class="button is-primary" href="{{ url_for('register')}}">Don't have an account Sing Up</a>
+   </div>
 </body>
 </html>

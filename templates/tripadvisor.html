@@ -19,10 +19,26 @@
         </div>
       </section>
       <br>
-      <br>
-      <div class="buttons">
-        <a class="button is-success" href="{{ url_for('tripadvisorweb') }}">Scrape Tripadvisor</a>
-        
+      <div class="box has-text-centered">
+        <div  class="field">
+          <form class= "form" method="POST"  action=""></form>
+            <label class="label">What do you want to scrape?</label>
+            <div class="control">
+              <input name = "style" class="input" type="text" placeholder="Whatever you wnat to search in TripAdvisor">
+              
+            </div>
+            <p class="help">(e.g. Restaurante Italiano , Hoteles en la Costa Brava...)</p>
+            <br>
+            <br>
+            
+            <a type="submit" class="button is-success" href="{{ url_for('tripadvisorweb') }}">Scrape Tripadvisor</a>
+          </form>
+        </div>
       </div>
+      
+
+      
+      
+      
 </body>
 </html>

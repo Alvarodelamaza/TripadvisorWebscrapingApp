@@ -5,14 +5,21 @@ import csv
 from selenium import webdriver
 import time
 import numpy as np
-import pandas as pd
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException        
-from flask import Flask , render_template, url_for, redirect
+from flask import Flask , render_template, sessions, url_for, redirect, request, session
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user
+from flask_wtf import  FlaskForm
+from wtforms import StringField , PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+
+class ScrapingForm(FlaskForm):
+    style= StringField(validators=[InputRequired(), 
+    Length( min=1, max=30)], render_kw={"placeholder":"Style"})
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -20,18 +27,15 @@ def dashboard():
 
 @app.route('/tripadvisor', methods=['GET', 'POST'])
 def tripadvisor():
+    if request.method == 'POST':
+        session["style"] = request.form['style']
+    print(session["style"])
     return render_template('tripadvisor.html')
 
 
-@app.route('/tripadvisorweb', methods=['GET', 'POST'])
-@login_required
-
-def tripadvisorweb():
-
-    filt=4 
+def Webscraping(restaurantttype):
+    filt=4
     num_page=1
-
- # default tripadvisor website of restaurant
     url = "https://www.tripadvisor.es/Restaurants-g187497-Barcelona_Catalonia.html"
 
     # if you pass the inputs in the command line
@@ -59,7 +63,7 @@ def tripadvisorweb():
     
 
     Buscar=driver.find_element_by_xpath(".//input[@class='_3qLQ-U8m']")
-    Buscar.send_keys('Restaurante Ecologico')
+    Buscar.send_keys(restaurantttype)
     Buscar.send_keys(Keys.ENTER)
     time.sleep(1)
         
@@ -193,10 +197,22 @@ def tripadvisorweb():
 
     driver.quit()  
 
-    restaa = pd.DataFrame(total, 
-                    columns=['Restaurants','Adress', 'Web', 'Email', 'Phone', 'Area','Price','Style','Diets' ])
+    
     headers = ('Restaurants','Adress', 'Web', 'Email', 'Phone', 'Area','Price','Style','Diets' ) 
     data = total
+    return headers , data
+
+
+
+@app.route('/tripadvisorweb', methods=['GET', 'POST'])
+@login_required
+def tripadvisorweb():
+    
+    
+
+    headers , data = Webscraping(session["style"]) 
+
+    
     return render_template('tripadvisorweb.html', data=data, headers=headers)
 
     
