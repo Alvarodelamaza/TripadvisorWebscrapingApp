@@ -1,4 +1,4 @@
-from __main__ import app
+import app
 
 import sys
 import csv
