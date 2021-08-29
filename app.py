@@ -2,10 +2,26 @@ from flask import Flask , render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user
 from flask_wtf import  FlaskForm
+from selenium.webdriver.chrome import options
 from wtforms import StringField , PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+import sys
+import csv
+from selenium import webdriver
+import time
+import numpy as np
 
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException        
+from flask import Flask , render_template, sessions, url_for, redirect, request, session
+from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user
+from flask_wtf import  FlaskForm
+from wtforms import StringField , PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
 
 
 
@@ -58,12 +74,15 @@ class RegisterForm(FlaskForm):
     
     submit= SubmitField("Register")
 
-
     def validate_username( self, username):
         existing_user_username =User.query.filter_by(
             username=username.data).first()
         if existing_user_username:
             raise ValidationError("That username already exists.Please selec a different one.")
+
+class ScrapingForm(FlaskForm):
+    style= StringField(validators=[InputRequired(), 
+    Length( min=1, max=30)], render_kw={"placeholder":"Style"})
 
 
 
@@ -98,26 +117,7 @@ def register():
 
     return render_template('register.html', form=form)
 
-import sys
-import csv
-from selenium import webdriver
-import time
-import numpy as np
 
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException        
-from flask import Flask , render_template, sessions, url_for, redirect, request, session
-from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user
-from flask_wtf import  FlaskForm
-from wtforms import StringField , PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
-
-class ScrapingForm(FlaskForm):
-    style= StringField(validators=[InputRequired(), 
-    Length( min=1, max=30)], render_kw={"placeholder":"Style"})
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -125,22 +125,39 @@ def dashboard():
 
 @app.route('/tripadvisor', methods=['GET', 'POST'])
 def tripadvisor():
+    
     if request.method == 'POST':
-        session["style"] = request.form['style']
-    print(session["style"])
+        session["style"] = request.form["style"]
+        session["cities"] = request.form["cities"]
+        
+    
     return render_template('tripadvisor.html')
 
 
-def Webscraping(restaurantttype):
-    filt=4
-    num_page=1
-    url = "https://www.tripadvisor.es/Restaurants-g187497-Barcelona_Catalonia.html"
+def Webscraping(restaurantttype,city,num_page):
+    
+    
+    
+    filt=3
+    num_page=(int(num_page)/30)
+    
+    url = "https://www.google.com/"
 
     # if you pass the inputs in the command line
     path = '/Users/alvarodelamaza/Reservas Upna/env/bin/chromedriver 2'
 
     # Import the webdriver
-    driver = webdriver.Chrome(path)
+    
+
+    myOptions=webdriver.ChromeOptions()
+    myOptions.add_argument('--disable-infobars')
+    myOptions.add_argument('--disable-extensions')
+    myOptions.add_argument('--profile-directory=Default')
+    myOptions.add_argument('--disable-plugins-discovery')
+    myOptions.add_argument('--headless')
+    
+    driver = webdriver.Chrome(path, options=myOptions )
+
     driver.get(url)
 
     def check_exists_by_xpath(xpath):
@@ -149,27 +166,36 @@ def Webscraping(restaurantttype):
         except NoSuchElementException:
             return False
         return True
+    
+    cookiesgoo=driver.find_element_by_xpath(".//button[@id='L2AGLb']")
+    driver.execute_script("arguments[0].click();", cookiesgoo)
+    time.sleep(2)
+
+
+    goo=driver.find_element_by_xpath("//input[@class='gLFyf gsfi']")
+    goo.send_keys(restaurantttype+' in '+city+ '  Tripadvisor')
+    goo.send_keys(Keys.ENTER)
+
+    tripgo=driver.find_element_by_xpath(".//h3[@class='LC20lb DKV0Md']")
+    driver.execute_script("arguments[0].click();", tripgo)
+    time.sleep(2)
+
+
 
     # Accept cookies
-    time.sleep(3)
+    
     cookies=driver.find_element_by_xpath(".//button[@id='_evidon-accept-button']")
     driver.execute_script("arguments[0].click();", cookies)
     time.sleep(3)
-
-    
-      
     
 
-    Buscar=driver.find_element_by_xpath(".//input[@class='_3qLQ-U8m']")
-    Buscar.send_keys(restaurantttype)
-    Buscar.send_keys(Keys.ENTER)
-    time.sleep(1)
-        
-        
-        
+    
+    
+
+    #City
     
         
-        
+    
     restaurantssss=[]
     prices=[]
     baresT=[]
@@ -179,12 +205,7 @@ def Webscraping(restaurantttype):
     direccionT=[]
     total=[]
     k=0
-    if filt==3:
-            
-            #masmas=driver.find_elements_by_xpath("//*[@id='BODY_BLOCK_JQUERY_REFLOW']/div[2]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[3]/div/div/span[2]")
-            #driver.execute_script("arguments[0].click();", masmas)
-            #masmas[0].click
-            #time.sleep(2)
+    if filt==4:
             
             barico=driver.find_elements_by_xpath("//*[@id='search-filters']/ul/li[4]/a")
             driver.execute_script("arguments[0].click();", barico)
@@ -237,11 +258,7 @@ def Webscraping(restaurantttype):
                 mix=[prc.text for prc in precio]
             except NoSuchElementException:
                 precio='-'
-            #try:
-            # cocina=(driver.find_element_by_xpath('.//div[@class="_3UjHBXYa"]'))
-                #cocina=cocina.find_element_by_xpath('.//div[@class="_1XLfiSsv"]').text
-            #except NoSuchElementException:
-            # cocina=['-']
+            
             datos=['-','-']
             for m in range(len(email)):
                 try:
@@ -256,12 +273,12 @@ def Webscraping(restaurantttype):
                     break
                 try:
                     mailss =emailll.get_attribute('href')
-                    print(mailss)
                     datos[m]=mailss
                 except NoSuchElementException:
                     datos[m]='-'
                     break
-            datos[1]=datos[1][:-10]    
+            datos[1]=datos[1][:-10]
+            datos[1]=datos[1][7:]    
             item=[]
             item.append(name)
             item.append(direccion)
@@ -282,15 +299,23 @@ def Webscraping(restaurantttype):
             driver.close()
             driver.switch_to.window(window_before)
         if filt==4:
-            time.sleep(1)    
-            next_pagee=driver.find_element_by_xpath('.//a[@class="ui_button nav next primary "]')
-            driver.execute_script("arguments[0].click();", next_pagee)
-            time.sleep(2)
+            try:
+
+                time.sleep(1)    
+                next_pagee=driver.find_element_by_xpath('.//a[@class="ui_button nav next primary "]')
+                driver.execute_script("arguments[0].click();", next_pagee)
+                time.sleep(2)
+            except:
+                pass
         else:
-            time.sleep(1)    
-            next_page=driver.find_element_by_xpath('.//a[@class="nav next rndBtn ui_button primary taLnk"]')
-            driver.execute_script("arguments[0].click();", next_page)
-            time.sleep(2)
+            try:
+
+                time.sleep(1)    
+                next_page=driver.find_element_by_xpath('.//a[@class="nav next rndBtn ui_button primary taLnk"]')
+                driver.execute_script("arguments[0].click();", next_page)
+                time.sleep(2)
+            except:
+                pass
 
 
     driver.quit()  
@@ -305,10 +330,13 @@ def Webscraping(restaurantttype):
 @app.route('/tripadvisorweb', methods=['GET', 'POST'])
 @login_required
 def tripadvisorweb():
-    
+    if request.method == 'POST':
+        session["style"] = request.form["style"]
+        session["cities"] = request.form["cities"]
+        session["hmany"] = request.form["hmany"]
     
 
-    headers , data = Webscraping(session["style"]) 
+    headers , data = Webscraping(session["style"],session["cities"],session["hmany"]) 
 
     
     return render_template('tripadvisorweb.html', data=data, headers=headers)

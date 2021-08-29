@@ -4,24 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type= "text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <title>Here is your database</title>
 </head>
 <br>
 <body>
-    <table>
-        <tr>
-            {% for header in headers %}
-            <th>{{header}}</th>
+    <table class="table">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th>{{header}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for cell in row %}
+                <td>{{cell}}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% for row in data %}
-        <tr>
-            {% for cell in row %}
-            <td>{{cell}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

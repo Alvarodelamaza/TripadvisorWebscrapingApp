@@ -14,25 +14,66 @@
             Tripadvisor
           </p>
           <p class="subtitle">
-            Restaurants in Barcelona
+            You need to have install Google Chrome
+             and too be in Spain or use a VPN.
           </p>
         </div>
       </section>
       <br>
       <div class="box has-text-centered">
         <div  class="field">
-          <form class= "form" method="POST"  action=""></form>
+          <form class= "form" method="POST"  id="GFG" action="{{ url_for('tripadvisorweb')}}">
             <label class="label">What do you want to scrape?</label>
-            <div class="control">
-              <input name = "style" class="input" type="text" placeholder="Whatever you want to search in TripAdvisor">
-              
-            </div>
-            <p class="help">(e.g. Restaurante Italiano , Hoteles en la Costa Brava...)</p>
-            <br>
-            <br>
             
-            <a type="submit" class="button is-success" href="{{ url_for('tripadvisorweb') }}">Scrape Tripadvisor</a>
+            <input name = "style" input-id="trigger" class="input is-success" type="text" placeholder="Whatever you want to search in TripAdvisor"></input>
+            
+            
+          
+            <p class="help">(e.g. Italian Restaurant , Luxury Hotels...)</p>
+            <br>
+            <br>
+          
+            <label class="label">Where do you want to search?</label>
+          
+            
+            <input name = "cities" input-id="trigger" class="input is-success" type="text" placeholder="Where is going to be your search"></input>
+            <br>
+            <br>
+            <p class="help">(e.g. Barcelona , San Francisco...)</p>
+            <br>
+            <br>
+            <label class="label">How many results you want?</label>
+            
+            
+            <div class="select is-success" >
+              <select name="hmany" input-id="trigger">
+                <option>30</option>
+                <option>60</option>
+                <option>90</option>
+                <option>120</option>
+                <option>150</option>
+                <option>180</option>
+                <option>210</option>
+              </select>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <input   type="submit" class="button is-success"     />
+            
+             
           </form>
+          
+          
+          
+          <br>
+          <br>
+          
+          
+          
+          
         </div>
       </div>
       
