@@ -154,7 +154,7 @@ def Webscraping(restaurantttype,city,num_page):
     myOptions.binary_location = os.getenv('$GOOGLE_CHROME_BIN')
     myOptions.add_argument('--disable-infobars')
     myOptions.add_argument('--disable-extensions')
-    myOptions.add_argument('--disable-gpu')
+    myOptions.add_argument('--disable-dev-shm-usage')  
     myOptions.add_argument('--profile-directory=Default')
     myOptions.add_argument('--remote-debugging-port=9222')
     myOptions.add_argument('--disable-plugins-discovery')
