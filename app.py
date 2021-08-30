@@ -6,7 +6,7 @@ from selenium.webdriver.chrome import options
 from wtforms import StringField , PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-import sys
+import os
 import csv
 from selenium import webdriver
 import time
@@ -144,19 +144,21 @@ def Webscraping(restaurantttype,city,num_page):
     url = "https://www.google.com/"
 
     # if you pass the inputs in the command line
-    path = '/Users/alvarodelamaza/Reservas Upna/env/bin/chromedriver 2'
+    path = '/Users/alvarodelamaza/Tripadvisor Web App/env/bin/chromedriver 2'
 
     # Import the webdriver
     
-
+    
+    chrome_bin = os.environ.get('GOOGLE_CHROME_SHIM', None)
     myOptions=webdriver.ChromeOptions()
     myOptions.add_argument('--disable-infobars')
     myOptions.add_argument('--disable-extensions')
     myOptions.add_argument('--profile-directory=Default')
     myOptions.add_argument('--disable-plugins-discovery')
     myOptions.add_argument('--headless')
+    myOptions.binary_location  = chrome_bin
     
-    driver = webdriver.Chrome(path, options=myOptions )
+    driver = webdriver.Chrome(executable_path="chromedriver", options=myOptions )
 
     driver.get(url)
 
