@@ -156,8 +156,8 @@ def Webscraping(restaurantttype,city,num_page):
     myOptions.add_argument('--disable-extensions')
     myOptions.add_argument('--no-sandbox')
     #myOptions.add_argument('--disable-dev-shm-usage')  
-    myOptions.add_argument('--profile-directory=Default')
-    myOptions.add_argument('--remote-debugging-port=9222')
+    #myOptions.add_argument('--profile-directory=Default')
+    #myOptions.add_argument('--remote-debugging-port=9222')
     myOptions.add_argument('--disable-plugins-discovery')
     myOptions.add_argument('--headless')
     
