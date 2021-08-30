@@ -183,7 +183,7 @@ def Webscraping(restaurantttype,city,num_page):
 
     tripgo=driver.find_element_by_xpath(".//h3[@class='LC20lb DKV0Md']")
     driver.execute_script("arguments[0].click();", tripgo)
-    time.sleep(2)
+    time.sleep(1)
 
 
 
