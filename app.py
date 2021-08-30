@@ -158,7 +158,7 @@ def Webscraping(restaurantttype,city,num_page):
     myOptions.add_argument('--headless')
     myOptions.binary_location  = chrome_bin
     
-    driver = webdriver.Chrome(executable_path="chromedriver", options=myOptions )
+    driver = webdriver.Chrome(path, options=myOptions )
 
     driver.get(url)
 

@@ -9,23 +9,25 @@
 </head>
 <br>
 <body>
-    <table class="table">
-        <thead>
-            <tr>
-                {% for header in headers %}
-                <th>{{header}}</th>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                    <th>{{header}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{cell}}</td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in data %}
-            <tr>
-                {% for cell in row %}
-                <td>{{cell}}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div> 
 </body>
 </html>
