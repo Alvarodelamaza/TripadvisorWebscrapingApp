@@ -158,7 +158,7 @@ def Webscraping(restaurantttype,city,num_page):
     myOptions.add_argument('--profile-directory=Default')
     myOptions.add_argument('--remote-debugging-port=9222')
     myOptions.add_argument('--disable-plugins-discovery')
-    myOptions.add_argument('--headless')
+    #myOptions.add_argument('--headless')
     
     
     driver = webdriver.Chrome(executable_path=str(os.environ.get('CHROMEDRIVER_PATH')), options=myOptions )
