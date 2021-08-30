@@ -172,9 +172,9 @@ def Webscraping(restaurantttype,city,num_page):
             return False
         return True
     
-    cookiesgoo=driver.find_element_by_xpath(".//button[@id='L2AGLb']")
-    driver.execute_script("arguments[0].click();", cookiesgoo)
-    time.sleep(2)
+    #cookiesgoo=driver.find_element_by_xpath(".//button[@id='L2AGLb']")
+    #driver.execute_script("arguments[0].click();", cookiesgoo)
+    #time.sleep(2)
 
 
     goo=driver.find_element_by_xpath("//input[@class='gLFyf gsfi']")
