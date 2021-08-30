@@ -1,0 +1,17 @@
+runtime: python39 # or another supported version
+
+instance_class: F2
+
+env_variables:
+  CHROMEDRIVER_PATH: "/app/.chromedriver/bin/chromedriver"
+  GOOGLE_CHROME_BIN: "/app/.apt/usr/bin/google-chrome"
+
+handlers:
+# Matches requests to /images/... to files in static/images/...
+- url: 
+  static_dir: "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto
