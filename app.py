@@ -189,9 +189,9 @@ def Webscraping(restaurantttype,city,num_page):
 
     # Accept cookies
     
-    cookies=driver.find_element_by_xpath(".//button[@id='_evidon-accept-button']")
-    driver.execute_script("arguments[0].click();", cookies)
-    time.sleep(3)
+    #cookies=driver.find_element_by_xpath(".//button[@id='_evidon-accept-button']")
+    #driver.execute_script("arguments[0].click();", cookies)
+    #time.sleep(3)
     
 
     
