@@ -149,14 +149,14 @@ def Webscraping(restaurantttype,city,num_page):
     # Import the webdriver
     
     
-    chrome_bin = os.environ.get('GOOGLE_CHROME_SHIM', None)
+    
     myOptions=webdriver.ChromeOptions()
     myOptions.add_argument('--disable-infobars')
     myOptions.add_argument('--disable-extensions')
     myOptions.add_argument('--profile-directory=Default')
     myOptions.add_argument('--disable-plugins-discovery')
     myOptions.add_argument('--headless')
-    myOptions.binary_location  = chrome_bin
+    
     
     driver = webdriver.Chrome(path, options=myOptions )
 
