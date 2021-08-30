@@ -177,7 +177,7 @@ def Webscraping(restaurantttype,city,num_page):
     #driver.execute_script("arguments[0].click();", cookiesgoo)
     #time.sleep(2)
 
-    time.sleep(2)
+    time.sleep(1)
     goo=driver.find_element_by_xpath("//input[@class='gLFyf gsfi']")
     goo.send_keys(restaurantttype+' in '+city+ '  Tripadvisor')
     goo.send_keys(Keys.ENTER)
